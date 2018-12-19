@@ -1,0 +1,6 @@
+eclipse.m2.WorkspacelifecycleMappingsLocation=D\:/sts-3.6.1.RELEASE/workspace-sts/.metadata/.plugins/org.eclipse.m2e.core/lifecycle-mapping-metadata.xml
+eclipse.m2.defaultRuntime=apache-maven-3.5.2
+eclipse.m2.runtimes=D\:\\springsource\\apache-maven-3.0.4|apache-maven-3.5.2
+eclipse.m2.runtimesNodes/apache-maven-3.5.2/location=D\:\\apache-maven-3.5.2
+eclipse.m2.runtimesNodes/apache-maven-3.5.2/type=EXTERNAL
+eclipse.preferences.version=1

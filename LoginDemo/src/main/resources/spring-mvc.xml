@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+    http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd
+    http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
+    ">
+
+    <!-- 同时开启json格式的支持 -->
+    <mvc:annotation-driven></mvc:annotation-driven>
+
+    <!-- 扫描所有的controller 但是不扫描service -->
+    <context:component-scan base-package="controller">
+        <context:include-filter type="annotation"
+                                expression="org.springframework.stereotype.Controller"/>
+        <context:exclude-filter type="annotation"
+                                expression="org.springframework.stereotype.Service"/>
+    </context:component-scan>
+
+
+
+    <!-- 配置Freemarker屬性文件路徑 -->
+    <bean id="freemarkerConfiguration" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+        <property name="location" value="classpath:freemarker.properties"/>
+    </bean>
+
+
+    <!-- 配置freeMarker模板加載地址 -->
+    <bean id="freemarkerConfig" class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
+        <!-- 視圖解析器會在/WEB-INF/ftl/路徑下掃描視圖文件 -->
+        <property name="templateLoaderPath" value="/WEB-INF/ftl"/>
+        <!-- 设置页面中文乱码问题 -->
+        <property name="freemarkerSettings">
+            <props>
+                <prop key="defaultEncoding">UTF-8</prop>
+            </props>
+        </property>
+        <property name="freemarkerVariables">
+            <map>
+                <entry key="xml_escape" value-ref="fmXmlEscape"/>
+            </map>
+        </property>
+
+    </bean>
+    <bean id="fmXmlEscape" class="freemarker.template.utility.XmlEscape"/>
+    <!-- 配置freeMarker視圖解析器 -->
+    <bean id="freemakerViewResolver" class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
+
+        <property name="viewClass" value="org.springframework.web.servlet.view.freemarker.FreeMarkerView"/>
+        <!-- 掃描路徑內所有以ftl結尾的文件 -->
+        <property name="viewNames">
+            <array>
+                <value>*.ftl</value>
+            </array>
+        </property>
+
+        <!-- 设置相关属性 -->
+        <!--<property name="cache" value="true"/>-->
+        <property name="contentType" value="text/html; charset=UTF-8"/>
+        <property name="exposeRequestAttributes" value="true"/>
+        <property name="exposeSessionAttributes" value="true"/>
+        <property name="exposeSpringMacroHelpers" value="true"/>
+        <property name="requestContextAttribute" value="request"/>
+
+        <!-- 給視圖解析器配置優先級，你可以給之前jsp視圖解析器的值配為2 -->
+        <property name="order" value="1"/>
+    </bean>
+
+    <!--通用视图解析器-->
+    <bean id="viewResolverCommon"
+          class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+
+        <property name="viewClass">
+            <value>org.springframework.web.servlet.view.InternalResourceView
+            </value>
+        </property>
+        <property name="order" value="2"/>
+    </bean>
+
+    <!--拦截器，被过滤器替代了。Shiro的拦截比SpringMVC先要执行，不符合我的业务需求 -->
+<!--    <mvc:interceptors>
+        <mvc:interceptor>
+            &lt;!&ndash; /**可以拦截路径不管多少层 &ndash;&gt;
+            <mvc:mapping path="/**" />
+            <bean class="zhongfucheng.interceptor.LoginInterceptor"></bean>
+        </mvc:interceptor>
+    </mvc:interceptors>-->
+
+</beans>
